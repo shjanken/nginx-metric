@@ -16,5 +16,4 @@ type Log struct {
 
 type Item struct {
 	Log
-	Error error
 }

@@ -1,8 +1,6 @@
 package metric
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // DataProvider provide the data
 type DataProvider interface {
@@ -35,7 +33,9 @@ func (ser *serivce) Save() error {
 	}
 
 	for val := range ch {
-		fmt.Printf("the value is %v\n", val)
+		log := val.Log
+		// TODO: 处理log
+		fmt.Println(log)
 	}
 	return nil
 }
