@@ -16,7 +16,5 @@ http {
 203.208.60.101 - - [26/Dec/2020:06:00:55 +0800] "GET /car_1198367.html HTTP/1.1" 200 12011 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 42.120.161.124 - - [26/Dec/2020:06:00:55 +0800] "GET /carinfo_155205 HTTP/1.1" 302 0 "-" "YisouSpider"
 106.11.153.52 - - [26/Dec/2020:06:00:55 +0800] "GET / HTTP/1.1" 200 76935 "-" "YisouSpider"
-
 `
 )
-
