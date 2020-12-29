@@ -17,12 +17,14 @@ type Service interface {
 
 type service struct {
 	provider DataProvider
+	repo     Repo
 }
 
 // NewService return a new log service
-func NewService(p DataProvider) Service {
+func NewService(p DataProvider, r Repo) Service {
 	return &service{
 		provider: p,
+		repo:     r,
 	}
 }
 
@@ -33,10 +35,12 @@ func (ser *service) Save() error {
 		return err
 	}
 
-	for val := range ch {
-		log := val.Log
+	for item := range ch {
 		// TODO: 处理log
-		fmt.Println(log)
+		err := ser.repo.Insert(&item)
+		if err != nil {
+			// TODO: gather error
+		}
 	}
 	return nil
 }

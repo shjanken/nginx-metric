@@ -69,7 +69,7 @@ func TestRead(t *testing.T) {
 		data:   d,
 		config: c,
 	}
-	service := NewService(&p)
+	service := NewService(&p, nil)
 
 	var logs []Item
 	var err error

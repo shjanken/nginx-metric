@@ -14,6 +14,7 @@ type Log struct {
 	HTTPUserAgent string
 }
 
+// Item is metric item
 type Item struct {
 	Log
 }
