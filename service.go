@@ -12,21 +12,22 @@ type DataProvider interface {
 // Service is metrics item service
 type Service interface {
 	Save() error
+	Read() ([]Item, error)
 }
 
-type serivce struct {
+type service struct {
 	provider DataProvider
 }
 
 // NewService return a new log service
 func NewService(p DataProvider) Service {
-	return &serivce{
+	return &service{
 		provider: p,
 	}
 }
 
 // Save the data read from the data provider
-func (ser *serivce) Save() error {
+func (ser *service) Save() error {
 	ch, err := ser.provider.ReadData()
 	if err != nil {
 		return err
@@ -38,4 +39,18 @@ func (ser *serivce) Save() error {
 		fmt.Println(log)
 	}
 	return nil
+}
+
+// Read the data from data provider
+func (ser *service) Read() ([]Item, error) {
+	ch, err := ser.provider.ReadData()
+	if err != nil {
+		return nil, fmt.Errorf("read data failure. %v", err)
+	}
+
+	var items []Item
+	for item := range ch {
+		items = append(items, item)
+	}
+	return items, nil
 }
