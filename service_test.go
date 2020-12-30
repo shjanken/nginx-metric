@@ -8,7 +8,60 @@ import (
 
 	"com.github.shjanken/nginx-metric/test"
 	"github.com/satyrius/gonx"
+	. "github.com/smartystreets/goconvey/convey"
 )
+
+func TestMetricService(t *testing.T) {
+	Convey("test metrics service functions", t, func() {
+		c := strings.NewReader(test.TestConfig)
+		d := strings.NewReader(test.TestLogs)
+		p := provider{
+			ch:     make(chan Item, 10),
+			data:   d,
+			config: c,
+		}
+
+		Convey("test read function", func() {
+
+			Convey("The Read funciton should return a list, count is 6", func() {
+				service := NewService(&p, nil)
+
+				logs, _ := service.Read()
+
+				So(len(logs), ShouldEqual, 6)
+			})
+
+			Convey("should panic if data provider is nil", func() {
+				service := NewService(nil, nil)
+
+				So(func() {
+					_, _ = service.Read()
+				}, ShouldPanic)
+			})
+		})
+
+		Convey("test save funciton", func() {
+
+			// save function need repo
+			r := repo{}
+
+			Convey("should panic if backend repo is nil", func() {
+				service := NewService(&p, nil)
+
+				So(func() {
+					_ = service.Save()
+				}, ShouldPanicWith, "the repo backend is nil")
+			})
+
+			Convey("should success save the 6 items", func() {
+				service := NewService(&p, &r)
+				service.Save()
+
+				So(len(r.data), ShouldEqual, 6)
+			})
+		})
+	})
+}
 
 // create test data provider
 type provider struct {
@@ -50,6 +103,15 @@ func (p *provider) ReadData() (<-chan Item, error) {
 	return p.ch, nil
 }
 
+type repo struct {
+	data []Log
+}
+
+func (r *repo) Insert(logs []Log) error {
+	r.data = logs
+	return nil
+}
+
 // read the data from gnox.Entry
 // if gnox.Entry.Field() return error, return ""
 func readDataFromGnoxEntry(entry *gonx.Entry, field string) string {
@@ -58,30 +120,4 @@ func readDataFromGnoxEntry(entry *gonx.Entry, field string) string {
 		return ""
 	}
 	return val
-}
-
-// test read the data from source
-func TestRead(t *testing.T) {
-	c := strings.NewReader(test.TestConfig)
-	d := strings.NewReader(test.TestLogs)
-	p := provider{
-		ch:     make(chan Item, 10),
-		data:   d,
-		config: c,
-	}
-	service := NewService(&p, nil)
-
-	var logs []Item
-	var err error
-	if logs, err = service.Read(); err != nil {
-		t.Fatalf("%+v\n", err)
-	}
-
-	if count := len(logs); count != 6 {
-		t.Fatalf("except logs count 6, but hava %d", count)
-	}
-}
-
-func TestSave(t *testing.T) {
-
 }

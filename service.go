@@ -38,6 +38,10 @@ func NewService(p DataProvider, r Repo) Service {
 
 // Save the data read from the data provider
 func (ser *service) Save() error {
+	if ser.repo == nil {
+		panic("the repo backend is nil")
+	}
+
 	ch, err := ser.provider.ReadData()
 	if err != nil {
 		return err
