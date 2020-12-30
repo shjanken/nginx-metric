@@ -81,3 +81,7 @@ func TestRead(t *testing.T) {
 		t.Fatalf("except logs count 6, but hava %d", count)
 	}
 }
+
+func TestSave(t *testing.T) {
+
+}
