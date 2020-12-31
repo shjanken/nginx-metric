@@ -14,14 +14,15 @@ type postgres struct {
 	db *pg.DB
 }
 
-// InsertError is a error with current log
-type InsertError struct {
-	Log    metric.Log
-	ErrMsg string
-}
-
-func (ie *InsertError) Error() string {
-	return fmt.Sprintf("insert log %v error: %v", ie.Log, ie.ErrMsg)
+// NewPostgre return a repo use postgresql backend
+func NewPostgre(dbname, user, password string) metric.Repo {
+	return &postgres{
+		db: pg.Connect(&pg.Options{
+			User:     user,
+			Password: password,
+			Database: dbname,
+		}),
+	}
 }
 
 func (pr *postgres) Insert(logs []metric.Log) error {
@@ -36,6 +37,10 @@ func (pr *postgres) Insert(logs []metric.Log) error {
 	}
 
 	return nil
+}
+
+func (pr postgres) Close() error {
+	return pr.db.Close()
 }
 
 func (pr *postgres) createSchema() error {
