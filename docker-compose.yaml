@@ -1,0 +1,17 @@
+version: "3.9"
+
+services: 
+  db:
+    image: postgres
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: metric
+    ports: 
+      - 5432:5432
+  
+  adminier:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

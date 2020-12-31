@@ -149,6 +149,10 @@ func (r *repo) Insert(logs []Log) error {
 	return nil
 }
 
+func (r *repo) Close() error {
+	return nil
+}
+
 // read the data from gnox.Entry
 // if gnox.Entry.Field() return error, return ""
 func readDataFromGnoxEntry(entry *gonx.Entry, field string) string {

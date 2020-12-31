@@ -12,9 +12,21 @@ type DataProvider interface {
 	ReadData() (<-chan Item, error)
 }
 
+// Closer offer close function for repo
+type Closer interface {
+	// close the repo
+	Close() error
+}
+
+// Inserter the data to backend
+type Inserter interface {
+	Insert(logs []Log) error
+}
+
 // Repo is backend
 type Repo interface {
-	Insert(logs []Log) error
+	Inserter
+	Closer
 }
 
 // Service is metrics item service
