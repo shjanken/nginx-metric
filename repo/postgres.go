@@ -8,7 +8,7 @@ import (
 	"github.com/go-pg/pg/v10/orm"
 )
 
-const DB_ERROR = `database connect is nil.`
+const dbError = `database connect is nil.`
 
 type postgres struct {
 	db *pg.DB
@@ -26,7 +26,7 @@ func (ie *InsertError) Error() string {
 
 func (pr *postgres) Insert(logs []metric.Log) error {
 	if pr.db == nil {
-		panic(DB_ERROR)
+		panic(dbError)
 	} // 如果 postgres 的数据库连接是 Nil，说明这个是一个bug
 
 	_, err := pr.db.Model(&logs).Insert()

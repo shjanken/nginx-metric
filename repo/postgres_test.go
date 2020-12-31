@@ -26,7 +26,7 @@ func TestPostgresRepo(t *testing.T) {
 				panicPG.Insert([]metric.Log{
 					{Request: "fake request"},
 				})
-			}, ShouldPanicWith, DB_ERROR)
+			}, ShouldPanicWith, dbError)
 		})
 
 		Convey("should success insert data into database", func() {
