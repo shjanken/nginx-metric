@@ -17,6 +17,7 @@ func TestPostgresRepo(t *testing.T) {
 				Database: "metric",
 			}),
 		}
+		defer fakePG.db.Close()
 
 		Convey("should panic when postgre db backend is nil", func() {
 			panicPG := postgres{}
@@ -29,8 +30,6 @@ func TestPostgresRepo(t *testing.T) {
 		})
 
 		Convey("should success insert data into database", func() {
-			defer fakePG.db.Close() // 测试完成以后关闭数据库连接
-
 			logs := []metric.Log{
 				{Request: "test request 1"},
 				{Request: "test request 2"},
@@ -39,12 +38,19 @@ func TestPostgresRepo(t *testing.T) {
 
 			if err := fakePG.createSchema(); err != nil {
 				t.Fatalf("create table failure, %v", err)
-				t.Fail()
 			}
 
 			err := fakePG.Insert(logs)
+			// select the data from database
+			count, err := fakePG.db.Model((*metric.Log)(nil)).Count()
+			var inserted []metric.Log
+			err = fakePG.db.Model(&inserted).Select()
 
 			So(err, ShouldBeNil)
+			So(count, ShouldEqual, 3)
+			for _, l := range inserted {
+				So(l, ShouldBeIn, logs)
+			}
 		})
 	})
 }

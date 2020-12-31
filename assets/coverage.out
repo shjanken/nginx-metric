@@ -23,7 +23,7 @@ com.github.shjanken/nginx-metric/repo/postgres.go:23.39,25.2 1 0
 com.github.shjanken/nginx-metric/repo/postgres.go:27.53,28.18 1 1
 com.github.shjanken/nginx-metric/repo/postgres.go:32.2,34.16 2 1
 com.github.shjanken/nginx-metric/repo/postgres.go:38.2,38.12 1 1
-com.github.shjanken/nginx-metric/repo/postgres.go:28.18,29.18 1 0
+com.github.shjanken/nginx-metric/repo/postgres.go:28.18,29.18 1 1
 com.github.shjanken/nginx-metric/repo/postgres.go:34.16,36.3 1 0
 com.github.shjanken/nginx-metric/repo/postgres.go:41.42,45.16 2 1
 com.github.shjanken/nginx-metric/repo/postgres.go:48.2,48.12 1 1
