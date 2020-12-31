@@ -1,0 +1,21 @@
+mode: set
+com.github.shjanken/nginx-metric/service.go:32.49,37.2 1 1
+com.github.shjanken/nginx-metric/service.go:40.34,41.21 1 1
+com.github.shjanken/nginx-metric/service.go:45.2,46.16 2 1
+com.github.shjanken/nginx-metric/service.go:50.2,51.23 2 1
+com.github.shjanken/nginx-metric/service.go:68.2,68.12 1 1
+com.github.shjanken/nginx-metric/service.go:41.21,42.35 1 1
+com.github.shjanken/nginx-metric/service.go:46.16,48.3 1 1
+com.github.shjanken/nginx-metric/service.go:51.23,56.24 2 1
+com.github.shjanken/nginx-metric/service.go:64.3,64.47 1 1
+com.github.shjanken/nginx-metric/service.go:56.24,57.48 1 0
+com.github.shjanken/nginx-metric/service.go:60.4,60.14 1 0
+com.github.shjanken/nginx-metric/service.go:57.48,59.5 1 0
+com.github.shjanken/nginx-metric/service.go:64.47,66.4 1 0
+com.github.shjanken/nginx-metric/service.go:72.44,74.25 1 1
+com.github.shjanken/nginx-metric/service.go:78.2,79.16 2 1
+com.github.shjanken/nginx-metric/service.go:83.2,84.23 2 1
+com.github.shjanken/nginx-metric/service.go:87.2,87.19 1 1
+com.github.shjanken/nginx-metric/service.go:74.25,75.66 1 1
+com.github.shjanken/nginx-metric/service.go:79.16,81.3 1 1
+com.github.shjanken/nginx-metric/service.go:84.23,86.3 1 1
