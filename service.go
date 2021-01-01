@@ -9,7 +9,7 @@ import (
 type DataProvider interface {
 	// Read the data from data provider
 	// data provider send the data to the channel one by one
-	ReadData() (<-chan Item, error)
+	ReadData(ch chan *Item)
 }
 
 // Closer offer close function for repo
@@ -54,10 +54,8 @@ func (ser *service) Save() error {
 		panic("the repo backend is nil")
 	}
 
-	ch, err := ser.provider.ReadData()
-	if err != nil {
-		return err
-	}
+	ch := make(chan *Item)
+	go ser.provider.ReadData(ch)
 
 	var logs []Log
 	for item := range ch {
@@ -66,6 +64,7 @@ func (ser *service) Save() error {
 		// 将数据接受到一个数组里面，如果数组的长度到达 1000 了，则调用函数存放
 		logs = append(logs, item.Log)
 		if len(logs) == 1000 {
+			fmt.Printf("has 1000 rows: %v\n", logs)
 			if err := ser.repo.Insert(logs); err != nil {
 				log.Fatalf("insert log failure. %v", err) // record error
 			}
@@ -87,14 +86,12 @@ func (ser *service) Read() ([]Item, error) {
 		panic(fmt.Sprintf("data provider is null. cant not read data"))
 	}
 
-	ch, err := ser.provider.ReadData()
-	if err != nil {
-		return nil, fmt.Errorf("read data failure. %v", err)
-	}
+	ch := make(chan *Item)
+	go ser.provider.ReadData(ch)
 
 	var items []Item
 	for item := range ch {
-		items = append(items, item)
+		items = append(items, *item)
 	}
 	return items, nil
 }

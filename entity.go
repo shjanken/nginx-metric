@@ -17,4 +17,5 @@ type Log struct {
 // Item is metric item
 type Item struct {
 	Log
+	Error error
 }
