@@ -1,9 +1,8 @@
-package repo
+package metric
 
 import (
 	"fmt"
 
-	metric "com.github.shjanken/nginx-metric"
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
@@ -15,7 +14,7 @@ type postgres struct {
 }
 
 // NewPostgre return a repo use postgresql backend
-func NewPostgre(dbname, user, password string) metric.Repo {
+func NewPostgre(dbname, user, password string) Repo {
 	return &postgres{
 		db: pg.Connect(&pg.Options{
 			User:     user,
@@ -25,7 +24,7 @@ func NewPostgre(dbname, user, password string) metric.Repo {
 	}
 }
 
-func (pr *postgres) Insert(logs []metric.Log) error {
+func (pr *postgres) Insert(logs []Log) error {
 	if pr.db == nil {
 		panic(dbError)
 	} // 如果 postgres 的数据库连接是 Nil，说明这个是一个bug
@@ -39,12 +38,12 @@ func (pr *postgres) Insert(logs []metric.Log) error {
 	return nil
 }
 
-func (pr postgres) Close() error {
+func (pr *postgres) Close() error {
 	return pr.db.Close()
 }
 
 func (pr *postgres) createSchema() error {
-	err := pr.db.Model((*metric.Log)(nil)).CreateTable(&orm.CreateTableOptions{
+	err := pr.db.Model((*Log)(nil)).CreateTable(&orm.CreateTableOptions{
 		Temp: true,
 	})
 	if err != nil {

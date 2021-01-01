@@ -3,6 +3,7 @@ package metric
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"testing"
 
@@ -55,7 +56,7 @@ func TestMetricService(t *testing.T) {
 		Convey("test save funciton", func() {
 
 			// save function need repo
-			r := repo{}
+			r := simpleRepo{}
 
 			Convey("should return err if provider.ReadData return err", func() {
 				errProvider := errorProvider{
@@ -88,6 +89,33 @@ func TestMetricService(t *testing.T) {
 				}
 			})
 		})
+	})
+}
+
+// 测试插入数据到真实的 PG 数据库中
+func TestWithPostgreRepo(t *testing.T) {
+	if testing.Short() || os.Getenv("TEST_PG") == "" {
+		t.Skip()
+	}
+
+	Convey("test with postgre sql", t, func() {
+		// use large file as data.
+		largeData, err := os.Open("testdata/access.log")
+		if err != nil {
+			t.Fatal(err)
+		}
+		c := strings.NewReader(test.TestConfig)
+		simpleProvider := &provider{
+			ch:     make(chan Item, 10),
+			data:   largeData,
+			config: c,
+		}
+		pgRepo := NewPostgre("metric", "posrgres", "postgres")
+		fakeService := NewService(simpleProvider, pgRepo)
+
+		err = fakeService.Save()
+
+		So(err, ShouldBeNil)
 	})
 }
 
@@ -140,16 +168,16 @@ func (ep *errorProvider) ReadData() (<-chan Item, error) {
 	return nil, fmt.Errorf(ep.errMsg)
 }
 
-type repo struct {
+type simpleRepo struct {
 	data []Log
 }
 
-func (r *repo) Insert(logs []Log) error {
+func (r *simpleRepo) Insert(logs []Log) error {
 	r.data = logs
 	return nil
 }
 
-func (r *repo) Close() error {
+func (r *simpleRepo) Close() error {
 	return nil
 }
 

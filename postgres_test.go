@@ -1,9 +1,8 @@
-package repo
+package metric
 
 import (
 	"testing"
 
-	metric "com.github.shjanken/nginx-metric"
 	"github.com/go-pg/pg/v10"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -23,14 +22,14 @@ func TestPostgresRepo(t *testing.T) {
 			panicPG := postgres{}
 
 			So(func() {
-				panicPG.Insert([]metric.Log{
+				panicPG.Insert([]Log{
 					{Request: "fake request"},
 				})
 			}, ShouldPanicWith, dbError)
 		})
 
 		Convey("should success insert data into database", func() {
-			logs := []metric.Log{
+			logs := []Log{
 				{Request: "test request 1"},
 				{Request: "test request 2"},
 				{Request: "test request 3"},
@@ -42,8 +41,8 @@ func TestPostgresRepo(t *testing.T) {
 
 			err := fakePG.Insert(logs)
 			// select the data from database
-			count, err := fakePG.db.Model((*metric.Log)(nil)).Count()
-			var inserted []metric.Log
+			count, err := fakePG.db.Model((*Log)(nil)).Count()
+			var inserted []Log
 			err = fakePG.db.Model(&inserted).Select()
 
 			So(err, ShouldBeNil)
@@ -51,6 +50,15 @@ func TestPostgresRepo(t *testing.T) {
 			for _, l := range inserted {
 				So(l, ShouldBeIn, logs)
 			}
+		})
+	})
+}
+
+func TestNewPostgre(t *testing.T) {
+	Convey("test NewPostgre function", t, func() {
+		Convey("should return a object", func() {
+			postgre := NewPostgre("metric", "postgre", "postgres")
+			So(postgre, ShouldNotBeNil)
 		})
 	})
 }
