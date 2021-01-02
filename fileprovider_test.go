@@ -1,33 +1,46 @@
 package metric
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
-	test "com.github.shjanken/nginx-metric/testdata"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestReadData(t *testing.T) {
+const (
+	TestConfig = `
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent"'
+
+}
+`
+)
+
+func TestReadDataFromFile(t *testing.T) {
 	if os.Getenv("BIG_FILE") == "" {
 		t.Skip("skip read testdata/access.log file test")
 	}
-	logfile, err := os.Open("testdata/access.log")
-	if err != nil {
-		t.Fatalf("open file failure. %v", err)
-	}
-	fprovider := fileProvider{
-		logFile: logfile,
-		config:  test.TestConfig,
-	}
-	ch := make(chan Item, 10)
 
-	go fprovider.ReadData(ch)
+	Convey("should read 5000 lines from access.log file", t, func() {
+		file, err := os.Open("testdata/access.log")
+		if err != nil {
+			t.Fatalf("read accesslog file failure.%v", err)
+		}
+		fileProvider := fileProvider{
+			logFile: file,
+			config:  TestConfig,
+		}
+		ch := make(chan *Item, 10)
+		var items []*Item
 
-	var cnt = 0
-	for d := range ch {
-		fmt.Println(d.Log)
-		cnt++
-		fmt.Println("----------------------\n", cnt)
-	}
+		go fileProvider.ReadData(ch)
+		for item := range ch {
+			items = append(items, item)
+		}
+
+		So(items, ShouldNotBeNil)
+		So(len(items), ShouldEqual, 5000)
+	})
 }

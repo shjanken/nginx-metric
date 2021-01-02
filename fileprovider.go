@@ -1,6 +1,7 @@
 package metric
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -15,11 +16,10 @@ const fileError = "log file is nil or config string is empty"
 type fileProvider struct {
 	logFile *os.File
 	config  string
-	ch      chan Item
 }
 
 // ReadData read the nginx log data and parse it
-func (fprovider *fileProvider) ReadData(ch chan Item) {
+func (fprovider *fileProvider) ReadData(ch chan *Item) {
 	if fprovider.logFile == nil || fprovider.config == "" {
 		panic(fileError)
 	}
@@ -36,14 +36,16 @@ func (fprovider *fileProvider) ReadData(ch chan Item) {
 			close(ch)
 			break
 		} else if err != nil {
-			//TODO 处理错误
-		}
+			ch <- &Item{
+				Error: fmt.Errorf("read log failure"),
+			}
+		} else {
+			request := readDataFromGnoxEntry(rec, "request")
 
-		request := readDataFromGnoxEntry(rec, "request")
-
-		ch <- Item{
-			Log{Request: request},
-			nil,
+			ch <- &Item{
+				Log{Request: request},
+				nil,
+			}
 		}
 	}
 }
