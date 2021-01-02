@@ -28,6 +28,7 @@ func TestReadDataFromFile(t *testing.T) {
 		if err != nil {
 			t.Fatalf("read accesslog file failure.%v", err)
 		}
+		defer file.Close()
 		fileProvider := fileProvider{
 			logFile: file,
 			config:  TestConfig,
