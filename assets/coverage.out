@@ -23,7 +23,7 @@ com.github.shjanken/nginx-metric/postgres.go:41.35,43.2 1 0
 com.github.shjanken/nginx-metric/postgres.go:45.42,49.16 2 1
 com.github.shjanken/nginx-metric/postgres.go:52.2,52.12 1 1
 com.github.shjanken/nginx-metric/postgres.go:49.16,51.3 1 0
-com.github.shjanken/nginx-metric/service.go:44.49,49.2 1 0
+com.github.shjanken/nginx-metric/service.go:44.49,49.2 1 1
 com.github.shjanken/nginx-metric/service.go:52.34,53.21 1 0
 com.github.shjanken/nginx-metric/service.go:57.2,61.23 4 0
 com.github.shjanken/nginx-metric/service.go:79.2,79.12 1 0
@@ -34,8 +34,8 @@ com.github.shjanken/nginx-metric/service.go:66.24,68.48 2 0
 com.github.shjanken/nginx-metric/service.go:71.4,71.14 1 0
 com.github.shjanken/nginx-metric/service.go:68.48,70.5 1 0
 com.github.shjanken/nginx-metric/service.go:75.47,77.4 1 0
-com.github.shjanken/nginx-metric/service.go:83.44,85.25 1 0
-com.github.shjanken/nginx-metric/service.go:89.2,93.23 4 0
-com.github.shjanken/nginx-metric/service.go:96.2,96.19 1 0
+com.github.shjanken/nginx-metric/service.go:83.44,85.25 1 1
+com.github.shjanken/nginx-metric/service.go:89.2,93.23 4 1
+com.github.shjanken/nginx-metric/service.go:96.2,96.19 1 1
 com.github.shjanken/nginx-metric/service.go:85.25,86.66 1 0
-com.github.shjanken/nginx-metric/service.go:93.23,95.3 1 0
+com.github.shjanken/nginx-metric/service.go:93.23,95.3 1 1
