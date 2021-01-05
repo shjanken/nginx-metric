@@ -1,12 +1,14 @@
 package metric
 
+import "time"
+
 type statusCode uint
 
 // Log is nginx log struct
 type Log struct {
 	RemoteAddr    string
 	RemoteUser    string
-	TimeLocal     string
+	TimeLocal     time.Time
 	Request       string
 	Status        statusCode
 	BodyBytes     uint

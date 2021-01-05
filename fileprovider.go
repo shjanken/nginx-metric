@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/satyrius/gonx"
 )
@@ -50,7 +51,11 @@ func (fprovider *fileProvider) ReadData(ch chan *Item) error {
 			request := readDataFromGnoxEntry(rec, "request")
 			remoteAddr := readDataFromGnoxEntry(rec, "remote_addr")
 			remoteUser := readDataFromGnoxEntry(rec, "remote_user")
-			timeLocal := readDataFromGnoxEntry(rec, "time_local")
+			timeStr := readDataFromGnoxEntry(rec, "time_local")
+			timeLocal, err := time.Parse("02/Jan/2006:15:04:05 -0700", timeStr)
+			if err != nil {
+				timeLocal = time.Now()
+			}
 			status, err := strconv.Atoi(readDataFromGnoxEntry(rec, "status"))
 			if err != nil {
 				status = 0
