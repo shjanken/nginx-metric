@@ -9,7 +9,7 @@ import (
 
 func TestPostgresRepo(t *testing.T) {
 	Convey("test postgres repository", t, func() {
-		fakePG := postgres{
+		fakePG := PostgresRepo{
 			db: pg.Connect(&pg.Options{
 				User:     "postgres",
 				Password: "postgres",
@@ -19,7 +19,7 @@ func TestPostgresRepo(t *testing.T) {
 		defer fakePG.db.Close()
 
 		Convey("should panic when postgre db backend is nil", func() {
-			panicPG := postgres{}
+			panicPG := PostgresRepo{}
 
 			So(func() {
 				panicPG.Insert([]Log{
@@ -35,7 +35,11 @@ func TestPostgresRepo(t *testing.T) {
 				{Request: "test request 3"},
 			}
 
-			if err := fakePG.createSchema(); err != nil {
+			if err := fakePG.DropSchema(); err != nil {
+				t.Fatalf("drop table failure %v", err)
+			}
+
+			if err := fakePG.CreateSchema(); err != nil {
 				t.Fatalf("create table failure, %v", err)
 			}
 

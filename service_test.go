@@ -92,11 +92,12 @@ type simpleProvider struct {
 	data []*Item
 }
 
-func (sp *simpleProvider) ReadData(ch chan *Item) {
+func (sp *simpleProvider) ReadData(ch chan *Item) error {
 	for _, v := range sp.data {
 		ch <- v
 	}
 	close(ch)
+	return nil
 }
 
 type simpleRepo struct {

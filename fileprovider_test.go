@@ -19,7 +19,7 @@ http {
 )
 
 func TestReadDataFromFile(t *testing.T) {
-	if os.Getenv("BIG_FILE") == "" {
+	if os.Getenv("BIGFILE") == "" {
 		t.Skip("skip read testdata/access.log file test")
 	}
 
@@ -42,6 +42,6 @@ func TestReadDataFromFile(t *testing.T) {
 		}
 
 		So(items, ShouldNotBeNil)
-		So(len(items), ShouldEqual, 5000)
+		So(len(items), ShouldEqual, 1018448)
 	})
 }

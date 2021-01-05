@@ -8,7 +8,7 @@ import (
 type DataProvider interface {
 	// Read the data from data provider
 	// data provider send the data to the channel one by one
-	ReadData(ch chan *Item)
+	ReadData(ch chan *Item) error
 }
 
 // Closer offer close function for repo
@@ -52,6 +52,7 @@ func (ser *service) Save() error {
 	if ser.repo == nil {
 		panic("the repo backend is nil")
 	}
+	defer ser.repo.Close()
 
 	ch := make(chan *Item)
 	go ser.provider.ReadData(ch)
@@ -63,7 +64,7 @@ func (ser *service) Save() error {
 		// fmt.Println(item)
 		if !isOpen && len(logs) != 0 {
 			if err := ser.repo.Insert(logs); err != nil {
-				return fmt.Errorf("insert log data failure %w", err)
+				return fmt.Errorf("service save data failure. %w", err)
 			}
 			break
 		} else if len(logs) < 1000 {
@@ -71,7 +72,7 @@ func (ser *service) Save() error {
 		} else if len(logs) == 1000 {
 			logs = append(logs, item.Log)
 			if err := ser.repo.Insert(logs); err != nil {
-				return fmt.Errorf("insert log data failure %w", err)
+				return fmt.Errorf("service save data failure. %w", err)
 			}
 			logs = nil
 		}

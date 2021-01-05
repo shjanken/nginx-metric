@@ -3,7 +3,6 @@ package metric
 import (
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 
@@ -18,16 +17,23 @@ type fileProvider struct {
 	config  string
 }
 
+// NewFileProvider 返回一个从 file 中一行一行读取数据的 DataProvider
+func NewFileProvider(file *os.File, config string) DataProvider {
+	return &fileProvider{
+		logFile: file,
+		config:  config,
+	}
+}
+
 // ReadData read the nginx log data and parse it
-func (fprovider *fileProvider) ReadData(ch chan *Item) {
+func (fprovider *fileProvider) ReadData(ch chan *Item) error {
 	if fprovider.logFile == nil || fprovider.config == "" {
 		panic(fileError)
 	}
 	config := strings.NewReader(fprovider.config)
 	reader, err := gonx.NewNginxReader(fprovider.logFile, config, "main")
 	if err != nil {
-		// 如果创建 NginxReader 失败， 直接退出程序
-		log.Fatalf("create nginx reader failure, %v", err)
+		return fmt.Errorf("create file reader failure %w", err)
 	}
 
 	for {
@@ -48,9 +54,7 @@ func (fprovider *fileProvider) ReadData(ch chan *Item) {
 			}
 		}
 	}
-}
 
-func (fprovider fileProvider) Save() error {
 	return nil
 }
 

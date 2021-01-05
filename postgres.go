@@ -9,13 +9,15 @@ import (
 
 const dbError = `database connect is nil.`
 
-type postgres struct {
+// PostgresRepo impletement the repo interface.
+// use postgres db as backend
+type PostgresRepo struct {
 	db *pg.DB
 }
 
 // NewPostgre return a repo use postgresql backend
-func NewPostgre(dbname, user, password string) Repo {
-	return &postgres{
+func NewPostgre(dbname, user, password string) *PostgresRepo {
+	return &PostgresRepo{
 		db: pg.Connect(&pg.Options{
 			User:     user,
 			Password: password,
@@ -24,7 +26,8 @@ func NewPostgre(dbname, user, password string) Repo {
 	}
 }
 
-func (pr *postgres) Insert(logs []Log) error {
+// Insert the logs to db
+func (pr *PostgresRepo) Insert(logs []Log) error {
 	if pr.db == nil {
 		panic(dbError)
 	} // 如果 postgres 的数据库连接是 Nil，说明这个是一个bug
@@ -32,22 +35,28 @@ func (pr *postgres) Insert(logs []Log) error {
 	_, err := pr.db.Model(&logs).Insert()
 
 	if err != nil {
-		return fmt.Errorf("insert logs failuire. %w. ", err)
+		return fmt.Errorf("fileprovider insert failure %w. ", err)
 	}
 
 	return nil
 }
 
-func (pr *postgres) Close() error {
+// Close db connect
+func (pr *PostgresRepo) Close() error {
 	return pr.db.Close()
 }
 
-func (pr *postgres) createSchema() error {
-	err := pr.db.Model((*Log)(nil)).CreateTable(&orm.CreateTableOptions{
-		Temp: true,
+// CreateSchema 创建需要的表
+func (pr *PostgresRepo) CreateSchema() error {
+	return pr.db.Model((*Log)(nil)).CreateTable(&orm.CreateTableOptions{
+		Temp: false,
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+}
+
+// DropSchema delete table
+func (pr *PostgresRepo) DropSchema() error {
+	return pr.db.Model((*Log)(nil)).DropTable(&orm.DropTableOptions{
+		IfExists: true,
+		Cascade:  true,
+	})
 }
