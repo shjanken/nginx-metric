@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/satyrius/gonx"
@@ -47,9 +48,31 @@ func (fprovider *fileProvider) ReadData(ch chan *Item) error {
 			}
 		} else {
 			request := readDataFromGnoxEntry(rec, "request")
+			remoteAddr := readDataFromGnoxEntry(rec, "remote_addr")
+			remoteUser := readDataFromGnoxEntry(rec, "remote_user")
+			timeLocal := readDataFromGnoxEntry(rec, "time_local")
+			status, err := strconv.Atoi(readDataFromGnoxEntry(rec, "status"))
+			if err != nil {
+				status = 0
+			}
+			bodyBytes, err := strconv.Atoi(readDataFromGnoxEntry(rec, "body_bytes_sent"))
+			if err != nil {
+				bodyBytes = 0
+			}
+			httpReferer := readDataFromGnoxEntry(rec, "http_referer")
+			httpUserAgent := readDataFromGnoxEntry(rec, "http_user_agent")
 
 			ch <- &Item{
-				Log{Request: request},
+				Log{
+					Request:       request,
+					RemoteAddr:    remoteAddr,
+					RemoteUser:    remoteUser,
+					TimeLocal:     timeLocal,
+					Status:        statusCode(status),
+					BodyBytes:     uint(bodyBytes),
+					HTTPReferer:   httpReferer,
+					HTTPUserAgent: httpUserAgent,
+				},
 				nil,
 			}
 		}
