@@ -3,7 +3,6 @@ package metric
 import (
 	"os"
 	"testing"
-	"time"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -19,45 +18,9 @@ http {
 `
 )
 
-func TestSaveToDB(t *testing.T) {
-	Convey("test save data to db", t, func() {
-		Convey("should success save data", func() {
-			pg := NewPostgre("metric", "postgres", "postgres")
-			defer pg.Close()
-
-			pg.DropSchema()
-			pg.CreateSchema()
-
-			logs := []Log{
-				{
-					Request:     "fake request 1",
-					TimeLocal:   time.Now(),
-					HTTPReferer: "no referer",
-				},
-				{
-					Request:     "fake request 2",
-					TimeLocal:   time.Now(),
-					HTTPReferer: "no referer",
-				},
-			}
-
-			err := pg.Insert(logs)
-			if err != nil {
-				t.Fatalf("save data to db failure %v", err)
-			}
-
-			So(err, ShouldBeNil)
-		})
-	})
-}
-
 func TestReadDataFromFile(t *testing.T) {
-	if os.Getenv("BIGFILE") == "" {
-		t.Skip("skip read testdata/access.log file test")
-	}
-
-	Convey("should read 5000 lines from access.log file", t, func() {
-		file, err := os.Open("testdata/access.log")
+	Convey("should read 500 lines from access.log file", t, func() {
+		file, err := os.Open("testdata/access.500.log")
 		if err != nil {
 			t.Fatalf("read accesslog file failure.%v", err)
 		}
@@ -75,6 +38,6 @@ func TestReadDataFromFile(t *testing.T) {
 		}
 
 		So(items, ShouldNotBeNil)
-		So(len(items), ShouldEqual, 1018448)
+		So(len(items), ShouldEqual, 500)
 	})
 }

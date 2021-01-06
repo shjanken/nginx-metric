@@ -54,15 +54,15 @@ func (fprovider *fileProvider) ReadData(ch chan *Item) error {
 			timeStr := readDataFromGnoxEntry(rec, "time_local")
 			timeLocal, err := time.Parse("02/Jan/2006:15:04:05 -0700", timeStr)
 			if err != nil {
-				timeLocal = time.Now()
+				timeLocal = time.Now() //TODO 这里应该返回错误, 并阻止程序继续运行
 			}
 			status, err := strconv.Atoi(readDataFromGnoxEntry(rec, "status"))
 			if err != nil {
-				status = 0
+				status = 0 //TODO 这里应该返回错误, 并阻止程序继续运行
 			}
 			bodyBytes, err := strconv.Atoi(readDataFromGnoxEntry(rec, "body_bytes_sent"))
 			if err != nil {
-				bodyBytes = 0
+				bodyBytes = 0 //TODO 这里应该返回错误, 并阻止程序继续运行
 			}
 			httpReferer := readDataFromGnoxEntry(rec, "http_referer")
 			httpUserAgent := readDataFromGnoxEntry(rec, "http_user_agent")

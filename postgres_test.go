@@ -2,10 +2,43 @@ package metric
 
 import (
 	"testing"
+	"time"
 
 	"github.com/go-pg/pg/v10"
 	. "github.com/smartystreets/goconvey/convey"
 )
+
+func TestSaveToDB(t *testing.T) {
+	Convey("test save data to db", t, func() {
+		Convey("should success save data", func() {
+			pg := NewPostgre("metric", "postgres", "postgres")
+			defer pg.Close()
+
+			pg.DropSchema()
+			pg.CreateSchema()
+
+			logs := []Log{
+				{
+					Request:     "fake request 1",
+					TimeLocal:   time.Now(),
+					HTTPReferer: "no referer",
+				},
+				{
+					Request:     "fake request 2",
+					TimeLocal:   time.Now(),
+					HTTPReferer: "no referer",
+				},
+			}
+
+			err := pg.Insert(logs)
+			if err != nil {
+				t.Fatalf("save data to db failure %v", err)
+			}
+
+			So(err, ShouldBeNil)
+		})
+	})
+}
 
 func TestPostgresRepo(t *testing.T) {
 	Convey("test postgres repository", t, func() {

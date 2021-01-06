@@ -13,7 +13,7 @@ func TestMetricService(t *testing.T) {
 	}
 
 	Convey("integrate test", t, func() {
-		Convey("should read 5000 lines from access.log file", func() {
+		Convey("should read all lines from access.log file", func() {
 			file, err := os.Open("testdata/access.log")
 			if err != nil {
 				t.Fatalf("read file failure %v", err)

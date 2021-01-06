@@ -9,9 +9,3 @@ services:
       POSTGRES_DB: metric
     ports: 
       - 5432:5432
-  
-  adminier:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
