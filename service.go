@@ -60,7 +60,7 @@ func (ser *service) Save() error {
 	ch := make(chan *Item)
 	go ser.provider.ReadData(ch)
 
-	var logs []Log
+	logs := make([]Log, 0, 1000)
 
 	for {
 		item, isOpen := <-ch
