@@ -43,3 +43,4 @@ $ make test-with-bigfile
 ```
 
 # benchmark
+[](https://github.com/shjanken/nginx-metric/blob/master/assets/bm.png)
