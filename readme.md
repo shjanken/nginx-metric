@@ -36,6 +36,14 @@ $ docker-compose up -d
 $ make test
 ```
 
+## 测试覆盖率
+```bash
+$ make cover
+
+...  coverage: 81.6% of statements
+...
+```
+
 ## 使用真实日志文件运行测试
 将真实的 `nginx` `access.log` 文件复制到 `testdata/` 目录下面, 然后运行
 ```bash
