@@ -6,6 +6,7 @@ type statusCode uint
 
 // Log is nginx log struct
 type Log struct {
+	ID            int
 	RemoteAddr    string
 	RemoteUser    string
 	TimeLocal     time.Time
