@@ -36,10 +36,10 @@ $ docker-compose up -d
 $ make test
 ```
 
-## 使用大日志文件运行测试
+## 使用真实日志文件运行测试
+将真实的 `nginx` `access.log` 文件复制到 `testdata/` 目录下面, 然后运行
 ```bash
 $ make test-with-bigfile
 ```
-会读取`testdata/access.log`文件。这个文件200M，有 *1018448* 条日志据
 
 # benchmark
