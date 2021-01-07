@@ -44,4 +44,4 @@ $ make test-with-bigfile
 
 # benchmark
 以下是尝试读取一个 `211M`, (`1018448`行数据) 的日志文件并存入数据库时间
-[benchmark](https://github.com/shjanken/nginx-metric/blob/master/assets/bm.png)
+(https://github.com/shjanken/nginx-metric/blob/master/assets/bm.png)
