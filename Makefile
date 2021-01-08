@@ -24,7 +24,6 @@ clean:
 	rm -rf target/$(BINARY_NAME)
 run: build
 	./$(BINARY_PATH)/$(BINARY_NAME) $(TESTFILE)
-	
 # docker-compse
 init-db:
 	docker-compose up -d
