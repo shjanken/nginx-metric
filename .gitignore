@@ -1,3 +1,4 @@
 testdata/access.log
 target/
 .vscode/
+release/
