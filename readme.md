@@ -3,7 +3,7 @@
 从 `Nginx` 的日志中读取数据，格式化数据，并存入后端数据库
 只支持 `postgres` 数据库
 
-# Usgae
+# Usage
 ```bash
 $ ngxmetric access.log
 ```
@@ -29,7 +29,7 @@ make build
 
 # 测试
 测试需要数据库的支持
-使用项目中得 `docker-compse` 文件可以创建一个 `postgres` 数据库
+使用项目中的 `docker-compose` 文件可以创建一个 `postgres` 数据库
 执行
 ```bash
 $ docker-compose up -d
