@@ -20,7 +20,7 @@ jobs:
       - name: run test
         run: make test
 
-  build:
+  release:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +28,26 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: "^1.15.6"
-      - name: run build
-        run: make build
+      - name: Run Release
+        run: make release
       - name: check build asset
         run: ls -al target
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.output.upload_url }}
+          asset_path: ./release/ngxmetric.tar.gz
+          asset_name: ngxmetric.tar.gz
+          asset_content_type: application/gzip
