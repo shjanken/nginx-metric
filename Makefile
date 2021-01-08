@@ -6,9 +6,11 @@ GORUN=$(GOCMD) run
 BINARY_NAME=ngxmetric
 BINARY_PATH=target
 TESTFILE=testdata/access.500.log
+RELEASE_PATH=release
+TARGET_PATH=target
 
 all: test build
-build:
+build: clean
 	$(GOBUILD) -o $(BINARY_PATH)/$(BINARY_NAME) cmd/ngxmetric/main.go
 	cp -r config $(BINARY_PATH)/
 cover:
@@ -21,7 +23,11 @@ test:
 	go test -v ./...
 clean:
 	$(GOCLEAN)
-	rm -rf target/$(BINARY_NAME)
+	rm -rf $(TARGET_PATH) 
+	rm -rf $(RELEASE_PATH)
+release: build
+	mkdir $(RELEASE_PATH)
+	tar -czf $(RELEASE_PATH)/ngxmetric.tar.gz $(TARGET_PATH)/*
 run: build
 	./$(BINARY_PATH)/$(BINARY_NAME) $(TESTFILE)
 # docker-compse
